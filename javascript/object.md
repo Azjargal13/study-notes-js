@@ -41,3 +41,22 @@ Contents of an obj consist of values stored at specifically named locations, whi
 
 In obj container stores properties names where properties act as a pointer (reference), to where the values are stored.
 
+# Object method
+
+Methods are a property containing a function definition.
+They are also functions stored as a object properties.
+
+If accessing method without (), it will return function definition.
+
+```js
+var simpleObj = {
+    name:'js',
+    value:'lang',
+    getName : function(){
+        return 'Here is name' + this.name + '.And it is a ' + this.value
+    }
+}
+
+```
+
+in this case, `getName()` is Object method.
