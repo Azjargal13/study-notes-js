@@ -2,6 +2,9 @@
 
 Difference between cookies, session storage and local storage?
 
+resources are from:
+-
+
 # Cookie
 
 - The very first time user sends request to the server and establish connection, it stores the tokens or session data, which only can be read by server side (means stored in the server). Generally cookies are used with HTTPOnly cookie flag.
