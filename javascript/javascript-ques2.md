@@ -4,6 +4,8 @@ resources used:
 - https://developer.mozilla.org/en-US/docs/Glossary/Hoisting
 - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals
 - https://developers.google.com/web/updates/2015/01/ES6-Template-Strings
+- https://developer.mozilla.org/en-US/docs/Glossary/IIFE
+- https://stackoverflow.com/questions/1013385/what-is-the-difference-between-a-function-expression-vs-declaration-in-javascrip#3344397
 
 **Q:Explain "hoisting"**
 
@@ -202,3 +204,86 @@ f(1, 2, 3)    // 6
 f(1, 2, 3, 4) // 6 (the fourth parameter is not destructured)
 ```
 
+**Q:Why you might want to create static class members?**
+
+# static class member
+
+
+
+**Q: Expression and declarion difference**
+
+# Expression vs Declaration
+
+Calling them is exactly same. Difference is how the browser loads them into execution context.
+
+Function declarations are load before any code is executed.
+
+Function expressions load when the interpreter reaches that line of code.
+
+If trying to call function expression before it's loaded, error will be thrown. No code can be called until all declarations are loaded.
+
+```js
+// function declaration
+
+// as explained earlier, declarations always load before code exec
+// can be called as
+
+alert(foo())
+// alert will be shown
+
+function foo(){
+  return 'something'
+}
+
+```
+
+```js
+// function expression
+
+// named function expression
+
+var foo = function bar(){
+  return 'something'
+}
+
+// anonymous function expression
+
+var foo = function(){
+  return 'something'
+}
+```
+
+`foo()` can be called after its creation.
+
+# Immediately-invoked function expression (IIFE)
+runs as soon as it is defined.
+Also known as self-executing anonymous function.
+
+contain two major parts:
+
+ - enclosed with grouping operator ()
+ - function expression ()
+
+Function becomes a function expression which is immediately executed. The var within the expr can not be accessed from outside it.
+
+```js
+// IIFE
+(function(){
+  var foo = "bar"
+})()
+
+foo 
+
+// will throw error
+```
+Assigning the IIFE to a variable stores the function's return value, not the function definition itself.
+
+```js
+var result = (function () {
+    var name = "Barry"; 
+    return name; 
+})(); 
+// Immediately creates the output: 
+result; // "Barry"
+
+```
