@@ -6,6 +6,9 @@ resources used:
 - https://developers.google.com/web/updates/2015/01/ES6-Template-Strings
 - https://developer.mozilla.org/en-US/docs/Glossary/IIFE
 - https://stackoverflow.com/questions/1013385/what-is-the-difference-between-a-function-expression-vs-declaration-in-javascrip#3344397
+- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/static
+- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode
+- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
 
 **Q:Explain "hoisting"**
 
@@ -208,7 +211,51 @@ f(1, 2, 3, 4) // 6 (the fourth parameter is not destructured)
 
 # static class member
 
+Static class members usually used as utility functions. Static methods aren't called on instances of the class. These method calls are made directly on the class.
 
+```js
+class ClassWithStaticMethod {
+  static staticMethod() {
+    return 'static method has been called.';
+  }
+}
+
+console.log(ClassWithStaticMethod.staticMethod());
+// 'static method has been called.'
+
+// if we call the method on instance
+
+c = new ClassWithStaticMethod()
+c.staticMethod()
+
+// TypeError: c.staticMethod is not a function
+```
+
+Static method can be accessed with constructor.
+
+```js
+class StaticMethodCall {
+  constructor() {
+    console.log(StaticMethodCall.staticMethod()); 
+    // 'static method has been called.' 
+
+    console.log(this.constructor.staticMethod()); 
+    // 'static method has been called.' 
+  }
+
+  static staticMethod() {
+    return 'static method has been called.';
+  }
+}
+
+StaticMethodCall.staticMethod()
+// static method has been called.
+
+c = new StaticMethodCall()
+c.constructor.staticMethod()
+
+// static method has been called.
+```
 
 **Q: Expression and declarion difference**
 
@@ -280,10 +327,123 @@ Assigning the IIFE to a variable stores the function's return value, not the fun
 
 ```js
 var result = (function () {
-    var name = "Barry"; 
+    var name = "Aza"; 
     return name; 
 })(); 
 // Immediately creates the output: 
-result; // "Barry"
+result; // "Aza"
 
+```
+
+**Q: Why is it called a Ternary operator, what does the word "Ternary" indicate?**
+
+# Ternary operator
+
+JS operator that takes three operands, condition followed by a  `?` then expression to execute if the condition is truthy `:` then finally the expression to execute if the condition is falsy.
+
+Shortcut of `if` statement.
+
+```js
+
+function getFee(isMember) {
+  return (isMember ? '$2.00' : '$10.00');
+}
+
+console.log(getFee(true));
+// expected output: "$2.00"
+
+console.log(getFee(false));
+// expected output: "$10.00"
+
+console.log(getFee(1));
+// expected output: "$2.00"
+
+```
+
+Conditional chains
+
+```js
+function example(…) {
+    return condition1 ? value1
+         : condition2 ? value2
+         : condition3 ? value3
+         : value4;
+}
+
+// Equivalent to:
+
+function example(…) {
+    if (condition1) { return value1; }
+    else if (condition2) { return value2; }
+    else if (condition3) { return value3; }
+    else { return value4; }
+}
+```
+
+
+**Q: What is strict mode? What are some of the advantages/disadvantages of using it?**
+
+# `use-strict`
+
+Strict mode, introduced in EC5.
+
+Changes to normal JS semantics
+- eliminate some JS silent errors by changing them to throw errors
+- fixes mistakes that make it difficult for JS engines to perform optimizations: strict mode sometimes can run faster
+- prohibits some syntax likely to be defined in future versions of ESnext
+
+Strict mode changes syntax and runtime behavior.
+Changes making easier to write secure JS.
+
+**Q:Difference between `Array.forEach()` and `Array.map()`?**
+
+# Array.forEach()
+
+The forEach() method executes a provided function once for each array element.
+There is no way to stop or break a forEach() loop other than by throwing an exception. If you need such behavior, the forEach() method is the wrong tool.
+
+Early termination may be accomplished with:
+
+ - A simple for loop
+ - A for...of / for...in loops
+ - Array.prototype.every()
+- Array.prototype.some()
+ - Array.prototype.find()
+ - Array.prototype.findIndex()
+
+Array methods: every(), some(), find(), and findIndex() test the array elements with a predicate returning a truthy value to determine if further iteration is required.
+
+# Array.map()
+
+The map() method creates a new array populated with the results of calling a provided function on every element in the calling array.
+
+Since map builds a new array, using it when you aren't using the returned array is an anti-pattern; use forEach or for-of instead.
+
+You shouldn't be using map if:
+
+ - you're not using the array it returns; and/or
+ - you're not returning a value from the callback.
+
+**Q: Difference between method and function in JS?**
+
+# Method
+In JavaScript every function is an object. An object is a collection of key:value pairs. If a value is a primitive (number, string, boolean), or another object, the value is considered a property. If a value is a function, it is called a `method`.
+
+Method : Method is a function when object is associated with it.
+
+```js
+var obj = {
+name : "John snow",
+work : function someFun(paramA, paramB) {
+    // some code..
+}
+```
+# Function
+
+Function : When no object is associated with it , it comes to function.
+
+```js
+function fun(param1, param2){
+// some code...
+}
 ```
