@@ -42,3 +42,78 @@ JavaScript will try to convert strings to numbers in all numeric operations.
 var x = 0xFF;        // x will be 255
 ```
 JavaScript interprets numeric constants as hexadecimal if they are preceded by 0x.
+
+### Q4: Self execution function execution
+```js
+var foo = "Hello";
+(function() {
+  var bar = " World";
+  alert(foo + bar);
+})();
+alert(foo + bar);
+
+// execute self exec function 
+// alert text will be "Hello World"
+```
+
+### Q5: Obj reference
+```js
+
+var foo = {n: 1};
+var bar = foo;
+foo.x = foo = {n: 2};
+
+// foo value {n:1}
+// foo gets new property x value of {n:2}
+// bar value reference of foo
+
+// bar = {n:1, x:{n:2}}
+```
+
+### Q6: Ordered execution
+```js
+console.log('one');
+setTimeout(function() {
+  console.log('two');
+}, 0);
+Promise.resolve().then(function() {
+  console.log('three');
+})
+console.log('four');
+
+// one
+// four
+// three
+// wait for 0 ms
+// two
+```
+
+### Q7: Return {}
+```js
+
+function foo1()
+{
+  return {
+      bar: "hello"
+  };
+}
+
+function foo2()
+{
+  return
+  {
+      bar: "hello"
+  };
+}
+
+// foo1()
+// {bar:"hello"}
+// foo1().bar
+// "hello"
+
+
+// foo2()
+// undefined
+
+// reason is due to bracket return {}
+```
