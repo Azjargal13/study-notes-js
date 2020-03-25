@@ -246,3 +246,76 @@ test(); // Shows "That's true"
 
 The execution of Snippet 3 shows "That's true" because when the code has been evaluated it has changed to the function that could return "That's false" but when the code has been executed it has been overwritten again with the function expression.
 
+# Delete operator
+
+Removes a property from an object; if no more references to the same property are held, it is eventually released automatically.
+
+```js
+const Employee = {
+  firstname: 'John',
+  lastname: 'Doe'
+}
+
+console.log(Employee.firstname);
+// expected output: "John"
+
+delete Employee.firstname;
+
+console.log(Employee.firstname);
+// expected output: undefined
+
+```
+the `delete` operator has nothing to do with directly freeing memory. Memory management is done indirectly via breaking references.
+
+**Prototype chain**
+
+```js
+function Foo() {
+  this.bar = 10;
+}
+
+Foo.prototype.bar = 42;
+
+var foo = new Foo();
+
+// foo.bar is associated with the 
+// own property. 
+console.log(foo.bar); // 10 
+
+// Delete the own property within the 
+// foo object. 
+delete foo.bar; // returns true 
+
+// foo.bar is still available in the 
+// prototype chain. 
+console.log(foo.bar); // 42 
+
+// Delete the property on the prototype.
+delete Foo.prototype.bar; // returns true 
+
+// The "bar" property can no longer be 
+// inherited from Foo since it has been 
+// deleted. 
+console.log(foo.bar); // undefined
+```
+
+# With single code detect IE
+
+```js
+function isIE() {
+    window.external = '';
+    return typeof window.external === 'object';
+}
+```
+
+NOTE: As of 2020, `window.external` is deprecated. So advised not to use.
+
+# Character encoding 
+
+```js
+console.log( '#2:', 'mañana' === 'mañana' );
+// returns false
+```
+
+The reason its returning false is UTF8 encoding is encoded character n and ~, which is different from ñ character.
+
