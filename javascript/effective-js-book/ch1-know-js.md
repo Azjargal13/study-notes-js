@@ -79,3 +79,53 @@ In other words, the newline following the return keyword forces an
 automatic semicolon insertion, which parses as a return with no
 argument followed by an empty block and an empty statement
 
+**Things to remember #4**
+
+- Avoid global var, keep use local var using `var` or `let` keyword
+- JS facts about closure:
+  - JS allows to refer to var that were defined outside of the current func.
+  ```js
+  function makeSandwich() {
+  var magicIngredient = "peanut butter";
+    function make(filling) {
+    return magicIngredient + " and " + filling;
+    }
+  return make("jelly");
+  }
+  makeSandwich(); // "peanut butter and jelly"
+  ```
+  - Function can refer to var defined in outer functions even after those outer func have returned.
+
+  ```js
+    function sandwichMaker() {
+      var magicIngredient = "peanut butter";
+      function make(filling) {
+      return magicIngredient + " and " + filling;
+      }
+      return make;
+      }
+    var f = sandwichMaker();
+    f("jelly"); // "peanut butter and jelly"
+  ```
+  **Functions that
+keep track of variables from their containing scopes are known as
+closures.** The make function is a closure whose code refers to two outer
+variables: magicIngredient and filling.
+  - The third and final fact to learn about closures is that they can
+update the values of outer variables. Closures actually store references
+to their outer variables, rather than copying their values.
+  ```js
+  function box() {
+  var val = undefined;
+  return {
+    set: function(newVal) { val = newVal; },
+    get: function() { return val; },
+    type: function() { return typeof val; }
+  };
+  }
+  var b = box();
+  b.type(); // "undefined"
+  b.set(98.6);
+  b.get(); // 98.6
+  b.type(); // "number"
+  ```
