@@ -79,6 +79,7 @@ In other words, the newline following the return keyword forces an
 automatic semicolon insertion, which parses as a return with no
 argument followed by an empty block and an empty statement
 
+# Chapter 2
 **Things to remember #4**
 
 - Avoid global var, keep use local var using `var` or `let` keyword
@@ -129,3 +130,32 @@ to their outer variables, rather than copying their values.
   b.get(); // 98.6
   b.type(); // "number"
   ```
+# Chapter 3: Working with Functions
+
+## Function, Method and Constructor calls
+
+```js
+// function call
+
+function hello(username) {
+    return "hello, " + username;
+}
+hello("Aza"); // "hello, Aza"
+```
+This does exactly what it looks like: It calls the hello function and
+binds the name parameter to its given argument.
+
+Methods in JS, obj properties that are function.
+
+```js
+var obj = {
+  name: function(){
+    return "hello, " + this.username;
+  }
+  username: "Aza"
+}
+obj.name()
+
+// "hello, Aza"
+```
+
