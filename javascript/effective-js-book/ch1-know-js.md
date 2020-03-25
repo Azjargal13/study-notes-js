@@ -55,7 +55,7 @@ Select any of `strict` mode or `non strict` mode policy for entire project.
 - Objects are coerced to numbers via `valueOf` and to strings via `toString`.
 - Coercion rule
 
-     ![Img]("../imgs/coersion-rule.PNG")
+     ![Img]("https://github.com/Azjargal13/study-notes-js/blob/master/javascript/imgs/coersion-rule.PNG")
 - Use `===` to make it clear to your readers that
 your comparison does not involve any implicit coercions.
 - Semicolons are only ever inserted before a } token, after one or more
