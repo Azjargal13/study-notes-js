@@ -54,6 +54,28 @@ Select any of `strict` mode or `non strict` mode policy for entire project.
 - Use typeof or comparison to undefined rather than truthiness to test for undefined values.
 - Objects are coerced to numbers via `valueOf` and to strings via `toString`.
 - Coercion rule
-     ![Img]("../imgs/coersion-rule.PNG")
 
+     ![Img]("../imgs/coersion-rule.PNG")
+- Use `===` to make it clear to your readers that
+your comparison does not involve any implicit coercions.
+- Semicolons are only ever inserted before a } token, after one or more
+newlines, or at the end of the program input.
+Semicolons are only ever inserted when the next input token cannot be
+parsed.
+
+```js
+return { };
+// returns a new object, whereas the code snippet
+```
+```js
+return
+{ };
+//parses as three separate statements, equivalent to:
+return;
+{ }
+;
+```
+In other words, the newline following the return keyword forces an
+automatic semicolon insertion, which parses as a return with no
+argument followed by an empty block and an empty statement
 
