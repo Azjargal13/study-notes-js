@@ -158,4 +158,89 @@ obj.name()
 
 // "hello, Aza"
 ```
+Call expression determines the binding of  `this` in method (call's receiver).
+Method calls provide the object in which the method property is
+looked up as their receiver.
 
+Constructors in JS,
+```js
+function User(name, passwordHash) {
+  this.name = name;
+  this.passwordHash = passwordHash;
+}
+//Invoking User with the new operator treats it as a constructor:
+var u = new User("aza",
+"0ef33ae791068ec64b502d6cb0191387");
+u.name; // "aza"
+```
+Unlike function calls and method calls, a constructor call passes a
+brand-new object as the value of this, and implicitly returns the new
+object as its result. The constructor function’s primary role is to initialize
+the object.
+
+## High order functions
+
+Higher-order functions are nothing more than functions that take
+other functions as arguments or return functions as their result.
+Taking function as an arg often referred as callbacks,
+
+```js
+// HOF
+function compareNumbers(x, y) {
+  if (x < y) {
+  return -1;
+  }
+  if (x > y) {
+  return 1;
+  }
+return 0;
+}
+[3, 1, 4, 1, 5, 9].sort(compareNumbers); // [1, 1, 3, 4, 5, 9]
+```
+
+We can simplify above example using anonymous function
+```js
+[3, 1, 4, 1, 5, 9].sort(function(x, y) {
+    if (x < y) {
+    return -1;
+    }
+    if (x > y) {
+    return 1;
+    }
+    return 0;
+}); // [1, 1, 3, 4, 5, 9]
+```
+Learning to use higher-order functions can often simplify your code
+and eliminate tedious boilerplate.
+
+```js
+var names = ["Fred", "Wilma", "Pebbles"];
+var upper = names.map(function(name) {
+  return name.toUpperCase();
+});
+upper; // ["FRED", "WILMA", "PEBBLES"]
+```
+Utility high-order function implementation
+```js
+function buildString(n, callback) {
+  var result = "";
+  for (var i = 0; i < n; i++) {
+    result += callback(i);
+  }
+return result;
+}
+
+var alphabet = buildString(26, function(i) {
+  return String.fromCharCode(aIndex + i);
+});
+alphabet; // "abcdefghijklmnopqrstuvwxyz"
+
+var digits = buildString(10, function(i) { return i; });
+digits; // "0123456789"
+
+var random = buildString(8, function() {
+  return String.fromCharCode(Math.floor(Math.random() * 26)
+  + aIndex);
+});
+random; // "ltvisfjr" (different result each time)
+```
