@@ -244,3 +244,6 @@ var random = buildString(8, function() {
 });
 random; // "ltvisfjr" (different result each time)
 ```
+**Things to remember:**
+
+- 
