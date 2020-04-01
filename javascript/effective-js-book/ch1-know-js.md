@@ -246,4 +246,7 @@ random; // "ltvisfjr" (different result each time)
 ```
 **Things to remember:**
 
-- 
+# Objects
+
+Objects inherit from other objects. Every object is associated with some other object,
+known as its prototype.
