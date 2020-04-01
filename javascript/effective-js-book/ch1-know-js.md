@@ -248,5 +248,115 @@ random; // "ltvisfjr" (different result each time)
 
 # Objects
 
-Objects inherit from other objects. Every object is associated with some other object,
-known as its prototype.
+Objects inherit from other objects. Every object is associated with some other object, known as its prototype.
+
+- C.prototype is used to establish the prototype obj created by new C().
+- Object.getPrototypeOf(obj) is the standard ES5 mechanism for retrieving obj's prototype obj.
+- obj.__proto__ is a nonstandard way of retrieving obj's prototype obj.
+
+```js
+  function User(name, passwordHash) {
+    this.name = name;
+    this.passwordHash = passwordHash;
+  }
+  User.prototype.toString = function() {
+  return "[User " + this.name + "]";
+  };
+  User.prototype.checkPassword = function(password) {
+  return hash(password) === this.passwordHash;
+  };
+  var u = new User("sfalken",
+  "0ef33ae791068ec64b502d6cb0191387");
+```
+
+User func comes with default prototype property.
+
+When we create an instance of User with the new operator,
+the resultant object u gets the object stored at User.prototype
+automatically assigned as its prototype object.
+
+Property lookups start by searching the object’s own properties;
+for example, u.name and u.passwordHash return the current values
+of immediate properties of u. Properties not found directly on u are
+looked up in u’s prototype. Accessing u.checkPassword, for example,
+retrieves a method stored in User.prototype.
+
+User as **a class**, even though it consists of little
+more than a function. `Classes in JavaScript are essentially the combination
+of a constructor function (User) and a prototype object used
+to share methods between instances of the class (User.prototype)`.
+
+The User function provides a public constructor for the class,
+and User.prototype is an internal implementation of the methods
+shared between instances. Ordinary uses of `User` and `u` have no need
+to access the prototype object directly.
+
+**if someone calls this new version of User with new?**
+Thanks to the **constructor override pattern**, it behaves just like it
+does with a function call. This works because JavaScript allows the
+result of a new expression to be overridden by an explicit return from
+a constructor function. When User returns self, the result of the new
+expression becomes self, which may be a different object from the one
+bound to this.
+
+**Things to remember**
+- A class is a design pattern consisting of a constructor function and
+an associated prototype.
+- C.prototype determines the prototype of objects created by new C().
+- Prefer the standards-compliant Object.getPrototypeOf to the nonstandard
+__proto__ property.
+- Never modify an object’s __proto__ property.
+- Use `Object.create` to provide a custom prototype for new objects.
+- check that the receiver value is a proper instance of User
+  ``` js
+  function User(name, passwordHash) {
+  if (!(this instanceof User)) {
+    return new User(name, passwordHash);
+  }
+  this.name = name;
+  this.passwordHash = passwordHash;
+  }
+  ``` 
+  This way, the result of calling User is an object that inherits from. User.prototype, regardless of whether it’s called as a function or as a
+  constructor.
+  ```js
+  var x = User("baravelli", "d8b74df393528d51cd19980ae0aa028e");
+  var y = new User("baravelli",
+  "d8b74df393528d51cd19980ae0aa028e");
+  x instanceof User; // true
+  y instanceof User; // true
+  ```
+- Make a constructor agnostic to its caller’s syntax by reinvoking
+itself with new or with Object.create.
+-  Document clearly when a function expects to be called with new.
+-  Prefer storing methods on prototypes over storing them on instance
+objects.
+
+## Closures
+
+Use it for information hiding. Closures are an austere data structure.
+`They store data in their enclosed variables without providing direct access to those variables.`
+The only way to gain access to the internals of a closure is for the
+function to provide access to it explicitly. In other words, `objects and
+closures have opposite policies: The properties of an object are automatically
+exposed, whereas the variables in a closure are automatically
+hidden.`
+
+```js
+function User(name, passwordHash) {
+    this.toString = function() {
+      return "[User " + name + "]";
+};
+    this.checkPassword = function(password) {
+      return hash(password) === passwordHash;
+};
+}
+```
+Notice how, unlike in other implementations, the toString and
+checkPassword methods refer to name and passwordHash as variables,
+rather than as properties of `this`.
+
+**Things to remember**
+- Closure variables are private, accessible only to local references.
+- Use local variables as private data to enforce information hiding
+within methods.
