@@ -342,3 +342,41 @@ for (indexOuterLoop = 0; indexOuterLoop < 1000; indexOuterLoop++)
 
 console.log( indexOuterLoop );  // Should log 0.
 ```
+
+# Ghost array
+
+```js
+var arr = [];
+arr[999] = 'john';
+console.log(arr.length);
+
+// 1000
+```
+
+```js
+var arr = [];
+arr[4294967295] = 'james';
+console.log(arr[4294967295]);
+
+// 'james'
+
+console.log(arr.length)
+// 0
+```
+
+**Explanation:** Array reached its limit so could not create all 0 values within this size. However it have kept value in that particular index.
+
+Because 4294967295 overflows the max number of elements that could be handled by Javascript in Arrays.
+
+Javascript arrays can work as objects, dictionaries, when you are using as key any value that can not be handled by Array objects.
+
+```js
+var arr = [];
+arr[Number.MIN_VALUE] =  'mary';
+console.log(arr.length);
+
+// 0
+
+console.log(arr[Number.MIN_VALUE]);
+//mary
+```
