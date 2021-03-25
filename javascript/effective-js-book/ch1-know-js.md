@@ -79,6 +79,7 @@ In other words, the newline following the return keyword forces an
 automatic semicolon insertion, which parses as a return with no
 argument followed by an empty block and an empty statement
 
+# Chapter 2
 **Things to remember #4**
 
 - Avoid global var, keep use local var using `var` or `let` keyword
@@ -129,3 +130,233 @@ to their outer variables, rather than copying their values.
   b.get(); // 98.6
   b.type(); // "number"
   ```
+# Chapter 3: Working with Functions
+
+## Function, Method and Constructor calls
+
+```js
+// function call
+
+function hello(username) {
+    return "hello, " + username;
+}
+hello("Aza"); // "hello, Aza"
+```
+This does exactly what it looks like: It calls the hello function and
+binds the name parameter to its given argument.
+
+Methods in JS, obj properties that are function.
+
+```js
+var obj = {
+  name: function(){
+    return "hello, " + this.username;
+  }
+  username: "Aza"
+}
+obj.name()
+
+// "hello, Aza"
+```
+Call expression determines the binding of  `this` in method (call's receiver).
+Method calls provide the object in which the method property is
+looked up as their receiver.
+
+Constructors in JS,
+```js
+function User(name, passwordHash) {
+  this.name = name;
+  this.passwordHash = passwordHash;
+}
+//Invoking User with the new operator treats it as a constructor:
+var u = new User("aza",
+"0ef33ae791068ec64b502d6cb0191387");
+u.name; // "aza"
+```
+Unlike function calls and method calls, a constructor call passes a
+brand-new object as the value of this, and implicitly returns the new
+object as its result. The constructor function’s primary role is to initialize
+the object.
+
+## High order functions
+
+Higher-order functions are nothing more than functions that take
+other functions as arguments or return functions as their result.
+Taking function as an arg often referred as callbacks,
+
+```js
+// HOF
+function compareNumbers(x, y) {
+  if (x < y) {
+  return -1;
+  }
+  if (x > y) {
+  return 1;
+  }
+return 0;
+}
+[3, 1, 4, 1, 5, 9].sort(compareNumbers); // [1, 1, 3, 4, 5, 9]
+```
+
+We can simplify above example using anonymous function
+```js
+[3, 1, 4, 1, 5, 9].sort(function(x, y) {
+    if (x < y) {
+    return -1;
+    }
+    if (x > y) {
+    return 1;
+    }
+    return 0;
+}); // [1, 1, 3, 4, 5, 9]
+```
+Learning to use higher-order functions can often simplify your code
+and eliminate tedious boilerplate.
+
+```js
+var names = ["Fred", "Wilma", "Pebbles"];
+var upper = names.map(function(name) {
+  return name.toUpperCase();
+});
+upper; // ["FRED", "WILMA", "PEBBLES"]
+```
+Utility high-order function implementation
+```js
+function buildString(n, callback) {
+  var result = "";
+  for (var i = 0; i < n; i++) {
+    result += callback(i);
+  }
+return result;
+}
+
+var alphabet = buildString(26, function(i) {
+  return String.fromCharCode(aIndex + i);
+});
+alphabet; // "abcdefghijklmnopqrstuvwxyz"
+
+var digits = buildString(10, function(i) { return i; });
+digits; // "0123456789"
+
+var random = buildString(8, function() {
+  return String.fromCharCode(Math.floor(Math.random() * 26)
+  + aIndex);
+});
+random; // "ltvisfjr" (different result each time)
+```
+**Things to remember:**
+
+# Objects
+
+Objects inherit from other objects. Every object is associated with some other object, known as its prototype.
+
+- C.prototype is used to establish the prototype obj created by new C().
+- Object.getPrototypeOf(obj) is the standard ES5 mechanism for retrieving obj's prototype obj.
+- obj.__proto__ is a nonstandard way of retrieving obj's prototype obj.
+
+```js
+  function User(name, passwordHash) {
+    this.name = name;
+    this.passwordHash = passwordHash;
+  }
+  User.prototype.toString = function() {
+  return "[User " + this.name + "]";
+  };
+  User.prototype.checkPassword = function(password) {
+  return hash(password) === this.passwordHash;
+  };
+  var u = new User("sfalken",
+  "0ef33ae791068ec64b502d6cb0191387");
+```
+
+User func comes with default prototype property.
+
+When we create an instance of User with the new operator,
+the resultant object u gets the object stored at User.prototype
+automatically assigned as its prototype object.
+
+Property lookups start by searching the object’s own properties;
+for example, u.name and u.passwordHash return the current values
+of immediate properties of u. Properties not found directly on u are
+looked up in u’s prototype. Accessing u.checkPassword, for example,
+retrieves a method stored in User.prototype.
+
+User as **a class**, even though it consists of little
+more than a function. `Classes in JavaScript are essentially the combination
+of a constructor function (User) and a prototype object used
+to share methods between instances of the class (User.prototype)`.
+
+The User function provides a public constructor for the class,
+and User.prototype is an internal implementation of the methods
+shared between instances. Ordinary uses of `User` and `u` have no need
+to access the prototype object directly.
+
+**if someone calls this new version of User with new?**
+Thanks to the **constructor override pattern**, it behaves just like it
+does with a function call. This works because JavaScript allows the
+result of a new expression to be overridden by an explicit return from
+a constructor function. When User returns self, the result of the new
+expression becomes self, which may be a different object from the one
+bound to this.
+
+**Things to remember**
+- A class is a design pattern consisting of a constructor function and
+an associated prototype.
+- C.prototype determines the prototype of objects created by new C().
+- Prefer the standards-compliant Object.getPrototypeOf to the nonstandard
+__proto__ property.
+- Never modify an object’s __proto__ property.
+- Use `Object.create` to provide a custom prototype for new objects.
+- check that the receiver value is a proper instance of User
+  ``` js
+  function User(name, passwordHash) {
+  if (!(this instanceof User)) {
+    return new User(name, passwordHash);
+  }
+  this.name = name;
+  this.passwordHash = passwordHash;
+  }
+  ``` 
+  This way, the result of calling User is an object that inherits from. User.prototype, regardless of whether it’s called as a function or as a
+  constructor.
+  ```js
+  var x = User("baravelli", "d8b74df393528d51cd19980ae0aa028e");
+  var y = new User("baravelli",
+  "d8b74df393528d51cd19980ae0aa028e");
+  x instanceof User; // true
+  y instanceof User; // true
+  ```
+- Make a constructor agnostic to its caller’s syntax by reinvoking
+itself with new or with Object.create.
+-  Document clearly when a function expects to be called with new.
+-  Prefer storing methods on prototypes over storing them on instance
+objects.
+
+## Closures
+
+Use it for information hiding. Closures are an austere data structure.
+`They store data in their enclosed variables without providing direct access to those variables.`
+The only way to gain access to the internals of a closure is for the
+function to provide access to it explicitly. In other words, `objects and
+closures have opposite policies: The properties of an object are automatically
+exposed, whereas the variables in a closure are automatically
+hidden.`
+
+```js
+function User(name, passwordHash) {
+    this.toString = function() {
+      return "[User " + name + "]";
+};
+    this.checkPassword = function(password) {
+      return hash(password) === passwordHash;
+};
+}
+```
+Notice how, unlike in other implementations, the toString and
+checkPassword methods refer to name and passwordHash as variables,
+rather than as properties of `this`.
+
+**Things to remember**
+- Closure variables are private, accessible only to local references.
+- Use local variables as private data to enforce information hiding
+within methods.
